@@ -19,4 +19,18 @@
         End Set
     End Property
 
+    ''' <summary>
+    ''' gets the filedata with the matching timestamp
+    ''' </summary>
+    ''' <param name="dt"></param>
+    ''' <returns>the file data with the matching time, otherwise nothing.</returns>
+    Public Function GetDataFromTime(dt As DateTime) As FileData
+        Dim result As FileData = Nothing
+        For Each datum In Data
+            If datum.Time = dt Then
+                result = datum
+            End If
+        Next
+        Return result
+    End Function
 End Class

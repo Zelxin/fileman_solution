@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{B89FFE0D-ADDD-4260-95AA-0ECA47F3270A}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <StartupObject>FileManipulation_.Module1</StartupObject>
+    <StartupObject>FileManipulation_.FileManipulationAssignment</StartupObject>
     <RootNamespace>FileManipulation_</RootNamespace>
     <AssemblyName>FileManipulation_</AssemblyName>
     <FileAlignment>512</FileAlignment>
@@ -71,7 +71,7 @@
   <ItemGroup>
     <Compile Include="Identifier.vb" />
     <Compile Include="FileData.vb" />
-    <Compile Include="Module1.vb" />
+    <Compile Include="FileManipulationAssignment.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
