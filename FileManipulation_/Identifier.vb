@@ -19,6 +19,10 @@
         End Set
     End Property
 
+    Public Sub New()
+        Data = New List(Of FileData)
+    End Sub
+
     ''' <summary>
     ''' gets the filedata with the matching timestamp
     ''' </summary>
