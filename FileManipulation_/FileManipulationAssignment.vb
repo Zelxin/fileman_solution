@@ -4,8 +4,8 @@ Imports System.Text
 Module FileManipulationAssignment
 
     Sub Main()
-        Dim dataSets = read(Directory.GetCurrentDirectory)
-        write(dataSets, "output.txt")
+        Dim dataSets = readWork(Directory.GetCurrentDirectory())
+        writeWork(dataSets, "output.txt")
     End Sub
 
     Sub write(things As List(Of Identifier), outputFilename As String)
@@ -38,8 +38,6 @@ Module FileManipulationAssignment
         File.WriteAllText(outputFilename, sbDataLines.ToString())
     End Sub
 
-
-
     Function read(dir As String) As List(Of Identifier)
         Dim result = New List(Of Identifier)
         Dim di = New DirectoryInfo(Directory.GetCurrentDirectory) ' Directory.GetCurrentDirectory
@@ -54,8 +52,9 @@ Module FileManipulationAssignment
                     Dim lineSplit = line.Split(","c)
                     Dim id = lineSplit(1)
                     Dim dt = DateTime.Parse(lineSplit(0))
-                    Dim value = Double.Parse(lineSplit(2)) '..........!
-                    Identifier.ID = id
+                    Dim Value As Double
+                    Dim bGoodValue = Double.TryParse(lineSplit(2), Value) '..........!
+                    identifier.ID = id
                     Dim fd = New FileData()
                     fd.Time = dt
                     fd.Value = value
@@ -69,16 +68,19 @@ Module FileManipulationAssignment
 
     Function readWork(dir As String) As List(Of Identifier)
         Dim result = New List(Of Identifier)
-        Dim di = New DirectoryInfo(Directory.GetCurrentDirectory) ' Directory.GetCurrentDirectory
+        Dim di = New DirectoryInfo(Directory.GetCurrentDirectory()) ' Directory.GetCurrentDirectory
         Dim files = di.GetFiles("*.csv")
 
-        For Each file In files 'This is intentionally written with the assumption there will only ever be 1(unique) identifier per file
+        For Each f In files 'This is intentionally written with the assumption there will only ever be 1(unique) identifier per file
             Dim identifier = New Identifier()
             Dim bGoodFile = True
-            Using sr As New StreamReader(file.FullName)
+            Dim lntCnt = 0
+            Using sr As New StreamReader(f.FullName)
                 Dim line = sr.ReadLine() ' I know the first line is a header line that I don't care about this will skip it.
-                While sr.Peek <> -1 'In vb i recommend checking peak.
+                lntCnt += 1
+                While sr.Peek() <> -1 'In vb i recommend checking peak.
                     line = sr.ReadLine()
+                    lntCnt += 1
                     Dim lineSplit = line.Split(","c)
                     Dim id = lineSplit(1)
                     Dim dt = DateTime.Parse(lineSplit(0))
@@ -98,6 +100,8 @@ Module FileManipulationAssignment
             End Using
             If bGoodFile Then
                 result.Add(identifier)
+            Else
+                File.WriteAllText("errors.log", $"File: {f} has an error on line: {lntCnt}. Quitting processing.")
             End If
         Next
         Return result
@@ -121,7 +125,7 @@ Module FileManipulationAssignment
         Dim lines As New List(Of String)
 
         While dataIndex < firstID.Data.Count()
-            sbDataLines.Append($"{firstID.Data(dataIndex).Time:yyyy},1")
+            sbDataLines.Append($"{firstID.Data(dataIndex).Time:yyyy-MM-dd HH:mm},1")
             For Each thing In things
                 Dim d = thing.Data(dataIndex)
                 sbDataLines.Append($",{d.Value}")
